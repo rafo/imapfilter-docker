@@ -6,7 +6,6 @@ FROM alpine:3.21.3 AS base
 RUN apk add --no-cache \
     lua5.4 \
     lua5.4-dev \
-    lua5.4-libs \
     openssl-dev \
     pcre2-dev
 
@@ -16,13 +15,14 @@ RUN apk add --no-cache \
     git \
     gcc \
     make \
-    musl-dev
+    musl-dev \
+    pkgconf
 
 # Build stage
 FROM build-deps AS build
 WORKDIR /src
 RUN git clone https://github.com/lefcha/imapfilter.git . && \
-    make INCDIRS="-I/usr/include/lua5.4" LIBLUA="-llua" LUA_CFLAGS="-I/usr/include/lua5.4" && \
+    make INCDIRS="$(pkg-config --cflags lua5.4)" LIBLUA="$(pkg-config --libs lua5.4)" && \
     make install
 
 # Final stage - minimal runtime image
