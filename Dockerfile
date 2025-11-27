@@ -4,7 +4,9 @@
 # Shared layer with dependencies
 FROM alpine:3.21.3 AS base
 RUN apk add --no-cache \
+    lua5.4 \
     lua5.4-dev \
+    lua5.4-libs \
     openssl-dev \
     pcre2-dev
 
