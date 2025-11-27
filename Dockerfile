@@ -22,7 +22,7 @@ RUN apk add --no-cache \
 FROM build-deps AS build
 WORKDIR /src
 RUN git clone https://github.com/lefcha/imapfilter.git . && \
-    make INCDIRS="-I/usr/include/lua5.4" LIBLUA="-llua5.4" && \
+    make INCDIRS="-I/usr/include/lua5.4" LIBLUA="-llua-5.4" && \
     make install
 
 # Final stage - minimal runtime image
