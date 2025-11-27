@@ -1,6 +1,6 @@
 services:
   imapfilter:
-    image: ghcr.io/YOUR_GITHUB_USERNAME/imapfilter:latest
+    image: ghcr.io/rafo/imapfilter-docker:latest
     container_name: imapfilter
     restart: unless-stopped
 

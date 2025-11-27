@@ -21,7 +21,7 @@ A lightweight, flexible Docker image for [imapfilter](https://github.com/lefcha/
 ```yaml
 services:
   imapfilter:
-    image: ghcr.io/YOUR_GITHUB_USERNAME/imapfilter:latest
+    image: ghcr.io/rafo/imapfilter-docker:latest
     container_name: imapfilter
     restart: unless-stopped
     environment:
@@ -50,7 +50,7 @@ docker run -d \
   -e RUN_INTERVAL=900 \
   -e TZ=Europe/Berlin \
   -v $(pwd)/config.lua:/config/config.lua:ro \
-  ghcr.io/YOUR_GITHUB_USERNAME/imapfilter:latest
+  ghcr.io/rafo/imapfilter-docker:latest
 ```
 
 ## Configuration
@@ -85,7 +85,7 @@ environment:
 Pass custom arguments to imapfilter:
 ```bash
 docker run -e RUN_MODE=custom \
-  ghcr.io/YOUR_GITHUB_USERNAME/imapfilter:latest \
+  ghcr.io/rafo/imapfilter-docker:latest \
   imapfilter -c /config/config.lua -d /config/debug.log
 ```
 
@@ -178,7 +178,7 @@ spec:
     spec:
       containers:
       - name: imapfilter
-        image: ghcr.io/YOUR_GITHUB_USERNAME/imapfilter:latest
+        image: ghcr.io/rafo/imapfilter-docker:latest
         env:
         - name: RUN_MODE
           value: "daemon"
@@ -199,7 +199,7 @@ spec:
 ### Local Build
 
 ```bash
-git clone https://github.com/YOUR_GITHUB_USERNAME/imapfilter-docker.git
+git clone https://github.com/rafo/imapfilter-docker.git
 cd imapfilter-docker
 docker build -t imapfilter:local .
 ```
@@ -235,7 +235,7 @@ Run in one-shot mode to test your configuration:
 docker run --rm \
   -e RUN_MODE=once \
   -v $(pwd)/config.lua:/config/config.lua:ro \
-  ghcr.io/YOUR_GITHUB_USERNAME/imapfilter:latest
+  ghcr.io/rafo/imapfilter-docker:latest
 ```
 
 ### Common Issues
