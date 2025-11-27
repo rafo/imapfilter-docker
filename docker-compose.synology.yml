@@ -1,0 +1,53 @@
+services:
+  imapfilter:
+    image: ghcr.io/rafo/imapfilter-docker:latest
+    container_name: imapfilter
+    restart: unless-stopped
+
+    # Environment variables
+    environment:
+      # Run mode: 'daemon' (continuous), 'once' (single run), or custom command
+      - RUN_MODE=daemon
+
+      # Interval between runs in seconds (default: 900 = 15 minutes)
+      - RUN_INTERVAL=900
+
+      # Timezone setting for Europe/Berlin
+      - TZ=Europe/Berlin
+
+    # Mount configuration and logs from Synology
+    volumes:
+      # Mount your imapfilter configuration file (READ-ONLY for security)
+      - /volume1/docker/imapfilter/config.lua:/config/config.lua:ro
+
+      # Optional: Mount additional Lua files if you use them
+      # - /volume1/docker/imapfilter/mailings.lua:/config/mailings.lua:ro
+      # - /volume1/docker/imapfilter/filter:/config/filter:ro
+
+      # Mount logs directory (READ-WRITE for log output)
+      - /volume1/docker/imapfilter/logs:/config/logs
+
+    # Health check to monitor container status
+    healthcheck:
+      test: ["CMD", "pgrep", "-f", "imapfilter"]
+      interval: 5m
+      timeout: 10s
+      start_period: 30s
+      retries: 3
+
+    # Security: Run as non-root user
+    # Synology typically uses UID 1026 for docker user, but can vary
+    # To find your UID: SSH into Synology and run: id <your-username>
+    user: "1026:100"  # Adjust if needed: UID:GID
+
+    # Resource limits (Memory only - Synology doesn't support CPU limits via cgroups)
+    # You can set memory limits in Komodo GUI if needed
+    mem_limit: 128m
+    mem_reservation: 64m
+
+    # Logging configuration (prevents log file from growing indefinitely)
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"

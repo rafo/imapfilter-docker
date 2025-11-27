@@ -38,14 +38,15 @@ RUN apk add --no-cache \
     bash \
     && rm -rf /var/cache/apk/*
 
-# Copy compiled imapfilter binary from build stage
+# Copy compiled imapfilter binary and shared files from build stage
 COPY --from=build /usr/local/bin/imapfilter /usr/local/bin/imapfilter
+COPY --from=build /usr/local/share/imapfilter /usr/local/share/imapfilter
 
 # Create non-root user for security
 RUN addgroup -g 1000 imapfilter && \
     adduser -D -u 1000 -G imapfilter imapfilter && \
-    mkdir -p /config && \
-    chown -R imapfilter:imapfilter /config
+    mkdir -p /config /home/imapfilter/.imapfilter && \
+    chown -R imapfilter:imapfilter /config /home/imapfilter
 
 # Set working directory
 WORKDIR /config
@@ -60,7 +61,8 @@ USER imapfilter
 ENV RUN_INTERVAL=900 \
     RUN_MODE=daemon \
     TZ=Europe/Berlin \
-    IMAPFILTER_CONFIG=/config/config.lua
+    IMAPFILTER_CONFIG=/config/config.lua \
+    HOME=/home/imapfilter
 
 # Health check
 HEALTHCHECK --interval=5m --timeout=10s --start-period=30s --retries=3 \
