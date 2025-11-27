@@ -40,8 +40,6 @@ RUN apk add --no-cache \
 
 # Copy compiled imapfilter binary from build stage
 COPY --from=build /usr/local/bin/imapfilter /usr/local/bin/imapfilter
-COPY --from=build /usr/local/share/man/man1/imapfilter.1 /usr/local/share/man/man1/imapfilter.1
-COPY --from=build /usr/local/share/man/man5/imapfilter_config.5 /usr/local/share/man/man5/imapfilter_config.5
 
 # Create non-root user for security
 RUN addgroup -g 1000 imapfilter && \
