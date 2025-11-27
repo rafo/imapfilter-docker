@@ -1,0 +1,46 @@
+# Git files
+.git
+.gitignore
+.gitattributes
+
+# Documentation
+README.md
+CLAUDE.md
+*.md
+!examples/*.md
+
+# Docker files (we don't need them in the image)
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Local configuration (users should mount their own)
+config.lua
+mailings.lua
+filter/
+
+# IDE and editor files
+.vscode
+.idea
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+*.log
+logs/
+debug.log
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Shell scripts (already in repo, not needed in image)
+*.sh
+!docker-entrypoint.sh
+
+# CI/CD
+.github/
+.gitlab-ci.yml

@@ -1,0 +1,61 @@
+services:
+  imapfilter:
+    image: ghcr.io/YOUR_GITHUB_USERNAME/imapfilter:latest
+    container_name: imapfilter
+    restart: unless-stopped
+
+    # Environment variables
+    environment:
+      # Run mode: 'daemon' (continuous), 'once' (single run), or custom command
+      - RUN_MODE=daemon
+
+      # Interval between runs in seconds (default: 900 = 15 minutes)
+      - RUN_INTERVAL=900
+
+      # Timezone setting
+      - TZ=Europe/Berlin
+
+      # Path to config file inside container
+      - IMAPFILTER_CONFIG=/config/config.lua
+
+    # Mount your local configuration
+    volumes:
+      # Mount your imapfilter configuration file
+      - ./config.lua:/config/config.lua:ro
+
+      # Optional: Mount additional Lua files (e.g., mailings.lua)
+      - ./mailings.lua:/config/mailings.lua:ro
+
+      # Optional: Mount filter directory
+      - ./filter:/config/filter:ro
+
+      # Optional: Mount logs directory (if you want persistent logs)
+      # - ./logs:/config/logs
+
+    # Health check
+    healthcheck:
+      test: ["CMD", "pgrep", "-f", "imapfilter"]
+      interval: 5m
+      timeout: 10s
+      start_period: 30s
+      retries: 3
+
+    # Security options
+    user: "1000:1000"  # Adjust to match your user ID
+
+    # Resource limits (optional, adjust as needed)
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+          cpus: '0.5'
+        reservations:
+          memory: 64M
+          cpus: '0.1'
+
+    # Logging configuration
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
